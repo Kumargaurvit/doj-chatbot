@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civil AI - Department of Justice Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .chat-container {
+            width: 400px;
+            height: 600px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-header {
+            background-color: #4caf50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 70%;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .user-message {
+            background-color: #e0f7fa;
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        .bot-message {
+            background-color: #f1f0f0;
+            align-self: flex-start;
+            text-align: left;
+        }
+
+        .chat-footer {
+            display: flex;
+            padding: 10px;
+            background-color: #ffffff;
+            border-top: 1px solid #ddd;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .chat-footer input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .chat-footer button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .chat-footer button:hover {
+            background-color: #45a049;
+        }
+
+        /* Ensure the chat scrolls to the latest message */
+        .chat-body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-body::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            Civil AI
+        </div>
+        <div class="chat-body" id="chat-body">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+    $('#send-button').click(function() {
+        const userInput = $('#user-input').val();
+        if (userInput.trim() === '') {
+            alert('Please enter a message.');
+            return;
+        }
+
+        // Add the user's message to the chat
+        $('#chat-body').append(`
+            <div class="message user-message">
+                ${userInput}
+            </div>
+        `);
+
+        // Send user input to the server and get response
+        $.post('/get_response', { user_input: userInput }, function(data) {
+            $('#chat-body').append(`
+                <div class="message bot-message">
+                    ${data.response}
+                </div>
+            `);
+            $('#chat-body').scrollTop($('#chat-body')[0].scrollHeight); // Scroll to the bottom
+        });
+
+        $('#user-input').val(''); // Clear the input field
+    });
+
+    $('#user-input').keypress(function(event) {
+        if (event.which === 13) { // Enter key pressed
+            $('#send-button').click();
+        }
+    });
+});
+    </script>
+</body>
+</html>
