@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 # Predefined intents and responses for various DoJ topics including greeting
 INTENTS = {
-    'greeting': ["hi", "hello", "hey", "greetings"],
+    'greeting': ["hi", "hello", "hey", "greetings","good morning","good afternoon","good evening"],
     'divisions': ["divisions", "departments", "section", "areas", "branches"],
     'judges': ["judges", "appointments", "vacancies", "supreme court", "high courts", "district courts"],
     'case_status': ["case", "status", "check", "pending", "disposed", "njdg"],
